@@ -11,6 +11,8 @@ import {
 } from "date-fns";
 import type { CalendarEvent } from "../types";
 
+import { timeLabel} from "@/lib/dateUtils";
+
 interface Props {
   date: Date;
   view: "month" | "week";
@@ -20,11 +22,6 @@ interface Props {
 }
 const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const datePart = (value: string) => value.slice(0, 10);
-const timePart = (value: string) => value.slice(11, 16);
-const timeLabel = (value: string) => {
-  const [h, m] = timePart(value).split(":").map(Number);
-  return `${h % 12 || 12}${m ? `:${String(m).padStart(2, "0")}` : ""} ${h >= 12 ? "PM" : "AM"}`;
-};
 const classType = (type: string) =>
   type.toLowerCase().replace(/[^a-z0-9_-]/g, "-");
 
@@ -86,7 +83,7 @@ export default function CalendarGrid({
                         ? `${timeLabel(event.startDate)} · `
                         : ""}
                     </span>
-                    <span className="event-title">{event.name}</span>
+                    <span className="event-title">{`${timeLabel(event.startDate)} ${event.name}`}</span>
                   </button>
                 ))}
                 {dayEvents.length > (view === "month" ? 3 : 8) && (
