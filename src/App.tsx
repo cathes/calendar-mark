@@ -148,26 +148,6 @@ export default function App() {
             onPick={setCurrentDate}
           />
         </div>
-        <div className="sidebar-bottom">
-          <div className="upgrade-card">
-            <div className="upgrade-icon">
-              <SparklesIcon sx={{ fontSize: 17 }} />
-            </div>
-            <strong>Make room for what matters.</strong>
-            <p>A little planning goes a long way.</p>
-            <button onClick={() => openCreate()}>
-              Plan an event <ChevronRightIcon sx={{ fontSize: 14 }} />
-            </button>
-          </div>
-          <div className="profile-row">
-            <div className="avatar">C</div>
-            <div>
-              <strong>Your calendar</strong>
-              <span>Personal workspace</span>
-            </div>
-            <span className="online-dot" />
-          </div>
-        </div>
       </aside>
 
       <section className="main-content">

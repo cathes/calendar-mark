@@ -13,7 +13,8 @@ npm-debug.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Testing
+# Testing and coverage
+/coverage
 /.jest-cache
 
 # Editor and operating system files
