@@ -15,22 +15,15 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import SearchIcon from "@mui/icons-material/Search";
 import SparklesIcon from "@mui/icons-material/AutoAwesome";
-
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+
 import CalendarGrid from "./components/CalendarGrid";
+import MiniCalendar from "./components/MiniCalendar";
 import EventModal from "./components/EventModal";
+
 import { useCalendarStore } from "./store/calendarStore";
 import type { CalendarEvent, EventInput } from "./types";
-
-const iso = (date: Date) => format(date, "yyyy-MM-dd");
-const timeLabel = (datetime: string) => {
-  const [h, m] = datetime.slice(11, 16).split(":").map(Number);
-  return `${h % 12 || 12}:${String(m).padStart(2, "0")} ${h >= 12 ? "PM" : "AM"}`;
-};
-const eventDate = (event: CalendarEvent) => event.startDate.slice(0, 10);
-const typeClass = (type: string) =>
-  type.toLowerCase().replace(/[^a-z0-9_-]/g, "-");
-
+import { iso, timeLabel, eventDate, typeClass } from "./lib/dateUtils";
 
 export default function App() {
   const [currentDate, setCurrentDate] = useState(() => {
@@ -132,14 +125,14 @@ export default function App() {
               aria-label="Previous month"
               onClick={() => setCurrentDate(subMonths(currentDate, 1))}
             >
-              <ChevronLeftIcon sx={{ fontSize: 15 }}  />
+              <ChevronLeftIcon sx={{ fontSize: 15 }} />
             </button>
             <strong>{format(currentDate, "MMMM yyyy")}</strong>
             <button
               aria-label="Next month"
               onClick={() => setCurrentDate(addMonths(currentDate, 1))}
             >
-              <ChevronRightIcon sx={{ fontSize: 15 }}  />
+              <ChevronRightIcon sx={{ fontSize: 15 }} />
             </button>
           </div>
           <MiniCalendar
@@ -153,7 +146,8 @@ export default function App() {
       <section className="main-content">
         <header className="topbar">
           <div className="breadcrumb">
-            Workspace <ChevronRightIcon sx={{ fontSize: 14 }} /> <strong>Calendar</strong>
+            Workspace <ChevronRightIcon sx={{ fontSize: 14 }} />{" "}
+            <strong>Calendar</strong>
           </div>
           <div className="topbar-right">
             <span className="today-indicator">
@@ -176,13 +170,13 @@ export default function App() {
               className="button primary add-main"
               onClick={() => openCreate()}
             >
-              <AddIcon sx={{ fontSize: 17 }}  /> New event
+              <AddIcon sx={{ fontSize: 17 }} /> New event
             </button>
           </div>
           <div className="stats-row">
             <div className="stat-card">
               <div className="stat-icon purple">
-                <CalendarMonthIcon sx={{ fontSize: 18 }}  />
+                <CalendarMonthIcon sx={{ fontSize: 18 }} />
               </div>
               <div>
                 <span className="stat-label">Total events</span>
@@ -233,7 +227,7 @@ export default function App() {
                   aria-label="Next period"
                   onClick={() => shift(1)}
                 >
-                  <ChevronRightIcon sx={{ fontSize: 18 }}  />
+                  <ChevronRightIcon sx={{ fontSize: 18 }} />
                 </button>
                 <h2>{monthLabel}</h2>
               </div>
@@ -388,46 +382,5 @@ export default function App() {
         }
       />
     </main>
-  );
-}
-
-function MiniCalendar({
-  date,
-  events,
-  onPick,
-}: {
-  date: Date;
-  events: CalendarEvent[];
-  onPick: (date: Date) => void;
-}) {
-  const first = new Date(date.getFullYear(), date.getMonth(), 1);
-  const start = new Date(first);
-  start.setDate(first.getDate() - first.getDay());
-  return (
-    <div className="mini-calendar">
-      <div className="mini-weekdays">
-        {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
-          <span key={`${d}${i}`}>{d}</span>
-        ))}
-      </div>
-      <div className="mini-days">
-        {Array.from({ length: 42 }, (_, i) => {
-          const day = new Date(start);
-          day.setDate(start.getDate() + i);
-          const active = isSameDay(day, date);
-          const marked = events.some((event) => eventDate(event) === iso(day));
-          return (
-            <button
-              key={iso(day)}
-              className={`${day.getMonth() !== date.getMonth() ? "muted" : ""} ${active ? "chosen" : ""} ${isToday(day) ? "is-today" : ""} ${marked ? "marked" : ""}`}
-              onClick={() => onPick(day)}
-              aria-label={format(day, "MMMM d, yyyy")}
-            >
-              {day.getDate()}
-            </button>
-          );
-        })}
-      </div>
-    </div>
   );
 }

@@ -27,6 +27,7 @@ const timeLabel = (value: string) => {
 };
 const classType = (type: string) =>
   type.toLowerCase().replace(/[^a-z0-9_-]/g, "-");
+
 export default function CalendarGrid({
   date,
   view,
